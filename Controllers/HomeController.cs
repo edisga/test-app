@@ -154,7 +154,15 @@ namespace MyPerfectApp.Controllers
                 file.Delete();
             }
 
-            string filename = Directory.GetCurrentDirectory() + @"\"+ RandomString(10, true) + ".txt";
+            String OS = Environment.OSVersion.ToString();
+            string filename = String.Empty;
+
+            if (OS.Contains("Win32NT")){
+                filename  = Directory.GetCurrentDirectory() + @"\" + RandomString(10, true) + ".txt";
+            } else
+            {
+                filename = Directory.GetCurrentDirectory() + "/" + RandomString(10, true) + ".txt";
+            }
 
             using (var fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None))
             {
