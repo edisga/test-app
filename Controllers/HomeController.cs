@@ -6,8 +6,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace MyPerfectApp.Controllers
 {
@@ -141,6 +143,19 @@ namespace MyPerfectApp.Controllers
             return View();
         }
 
+        static readonly HttpClient client = new HttpClient();
+        public async Task<IActionResult> Reporting()
+        {
+            int rd = RandomNumber(1, 100);
+            for (int i = 0; i < rd; i++)
+            {
+                HttpResponseMessage response = await client.GetAsync("https://samples.openweathermap.org/data/2.5/weather?q=Dallas,us&appid=b6907d289e10d714a6e88b30761fae22");
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+            }
+            
+            return View();
+        }
 
         public IActionResult About()
         {
@@ -168,6 +183,8 @@ namespace MyPerfectApp.Controllers
             {
                 fs.SetLength(sizeInMB * 1024 * 1024);
             }
+
+
 
             return View();
         }
