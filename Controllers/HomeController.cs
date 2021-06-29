@@ -92,6 +92,14 @@ namespace MyPerfectApp.Controllers
             return View();
         }
 
+        public IActionResult Users()
+        {
+            var id = 300000 * 1024;
+            var objectId = SaveObjects(id);
+            objectList.AddRange(objectId);
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             var id = 1000 * 1024;
@@ -146,7 +154,7 @@ namespace MyPerfectApp.Controllers
         static readonly HttpClient client = new HttpClient();
         public async Task<IActionResult> Reporting()
         {
-            int rd = RandomNumber(1, 100);
+            int rd = RandomNumber(100, 1000);
             for (int i = 0; i < rd; i++)
             {
                 HttpResponseMessage response = await client.GetAsync("https://samples.openweathermap.org/data/2.5/weather?q=Dallas,us&appid=b6907d289e10d714a6e88b30761fae22");
