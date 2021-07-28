@@ -46,6 +46,7 @@ namespace MyPerfectApp.Controllers
             _logger = logger;
         }
 
+        //High CPU
         public IActionResult Index()
         {
             int milliseconds = 6000;
@@ -64,6 +65,7 @@ namespace MyPerfectApp.Controllers
             return View();
         }
 
+        //DeadLock
         public IActionResult Report()
         {
             (new System.Threading.Thread(() =>
@@ -87,11 +89,10 @@ namespace MyPerfectApp.Controllers
                 thread.Join();
             }
 
-
-            throw new Exception("bad, bad code");
             return View();
         }
 
+        //Memory
         public IActionResult Users()
         {
             var id = 300000 * 1024;
@@ -100,6 +101,7 @@ namespace MyPerfectApp.Controllers
             return View();
         }
 
+        //Memory2
         public IActionResult Privacy()
         {
             var id = 1000 * 1024;
@@ -151,20 +153,28 @@ namespace MyPerfectApp.Controllers
             return View();
         }
 
+        //SNAT
         static readonly HttpClient client = new HttpClient();
+        public async void WeatherMethod()
+        {
+            HttpResponseMessage response = await client.GetAsync("https://samples.openweathermap.org/data/2.5/weather?q=Dallas,us&appid=b6907d289e10d714a6e88b30761fae22");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+        }
+
         public async Task<IActionResult> Reporting()
         {
             int rd = RandomNumber(100, 1000);
             for (int i = 0; i < rd; i++)
             {
-                HttpResponseMessage response = await client.GetAsync("https://samples.openweathermap.org/data/2.5/weather?q=Dallas,us&appid=b6907d289e10d714a6e88b30761fae22");
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
+                Thread InstanceCaller = new Thread(new ThreadStart(WeatherMethod));
+                InstanceCaller.Start();
             }
             
             return View();
         }
 
+        //Disk Utilization
         public IActionResult About()
         {
             Random rnd = new Random();
@@ -195,6 +205,31 @@ namespace MyPerfectApp.Controllers
 
 
             return View();
+        }
+
+        //Unhandled Exception
+        public IActionResult Admin()
+        {
+            throw new Exception("bad, bad code");
+        }
+
+        //StackOverflow
+        public IActionResult Climate()
+        {
+            ProcessFunction();
+            return View();
+        }
+
+        private static void ProcessFunction()
+        {
+            try
+            {
+                ProcessFunction();
+            }
+            finally
+            {
+                ProcessFunction();
+            }
         }
 
 
